@@ -15,4 +15,8 @@ data class File(
     @Version var version: Int? = null,
     @CreatedDate var createdAt: Instant? = null,
     @LastModifiedDate var lastModifiedAt: Instant? = null
-)
+) {
+    fun getName(): String {
+        return id.toString() + "." + extension
+    }
+}

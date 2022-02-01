@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource
 import org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.http.server.reactive.ServerHttpRequest
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -35,8 +36,13 @@ class FileController(
         return fileService.download(id)
     }
 
+    @DeleteMapping("/{id}")
+    suspend fun delete(@PathVariable id: UUID) {
+        fileService.delete(id)
+    }
+
     private suspend fun getUri(serverHttpRequest: ServerHttpRequest, filename: String): String {
         val uri = serverHttpRequest.uri
-        return """${uri.scheme}://${uri.host}${uri.port}/files/$filename"""
+        return """${uri.scheme}://${uri.host}:${uri.port}/files/$filename"""
     }
 }
