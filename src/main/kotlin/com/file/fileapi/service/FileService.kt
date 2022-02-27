@@ -4,9 +4,7 @@ import com.file.fileapi.configuration.properties.FileProperties
 import com.file.fileapi.domain.model.File
 import com.file.fileapi.exception.NotFoundException
 import com.file.fileapi.repository.FileRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactor.mono
-import kotlinx.coroutines.withContext
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import org.springframework.http.codec.multipart.FilePart
@@ -27,10 +25,6 @@ class FileService(
         val extension = filePart.extension
         val file = fileRepository.save(File(extension = extension))
 
-        withContext(Dispatchers.IO) {
-            Files.createDirectories(basePath)
-        }
-
         mono {
             filePart
         }
@@ -48,9 +42,8 @@ class FileService(
     }
 
     suspend fun delete(id: UUID) {
-        fileRepository.findById(id)
+        fileRepository.deleteAndReturnById(id)
             ?.let {
-                fileRepository.deleteById(id)
                 Files.deleteIfExists(getPath(it.getName()))
             } ?: throw NotFoundException("error.file.not-found", args = arrayOf(id))
     }

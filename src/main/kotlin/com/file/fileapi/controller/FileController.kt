@@ -1,8 +1,6 @@
 package com.file.fileapi.controller
 
-import com.file.fileapi.component.ContextAwareConversionService
-import com.file.fileapi.component.convert
-import com.file.fileapi.domain.dto.response.FileResponse
+import com.file.fileapi.domain.model.File
 import com.file.fileapi.service.FileService
 import org.springframework.core.io.Resource
 import org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE
@@ -19,16 +17,11 @@ import java.util.UUID
 
 @RestController
 @RequestMapping("/files")
-class FileController(
-    private val fileService: FileService,
-    private val conversionService: ContextAwareConversionService
-) {
+class FileController(private val fileService: FileService) {
 
-    @PostMapping("/upload")
-    suspend fun upload(@RequestPart("file") filePart: FilePart, serverHttpRequest: ServerHttpRequest): FileResponse {
-        return conversionService.convert<FileResponse>(fileService.upload(filePart)).apply {
-            uri = getUri(serverHttpRequest, this.id.toString())
-        }
+    @PostMapping
+    suspend fun upload(@RequestPart("file") filePart: FilePart, serverHttpRequest: ServerHttpRequest): File {
+        return fileService.upload(filePart)
     }
 
     @GetMapping("/{id}", produces = [APPLICATION_OCTET_STREAM_VALUE])
@@ -39,10 +32,5 @@ class FileController(
     @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: UUID) {
         fileService.delete(id)
-    }
-
-    private suspend fun getUri(serverHttpRequest: ServerHttpRequest, filename: String): String {
-        val uri = serverHttpRequest.uri
-        return """${uri.scheme}://${uri.host}:${uri.port}/files/$filename"""
     }
 }
