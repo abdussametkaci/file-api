@@ -8,9 +8,9 @@ import java.util.UUID
 
 @Table
 data class File(
-    @Id val id: UUID?,
+    @Id val id: UUID? = null,
     val extension: String,
-    @CreatedDate var createdAt: Instant?
+    @CreatedDate var createdAt: Instant? = null
 ) {
     fun getName(): String {
         return id.toString() + "." + extension
