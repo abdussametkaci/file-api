@@ -20,7 +20,7 @@ import java.util.UUID
 class FileController(private val fileService: FileService) {
 
     @PostMapping
-    suspend fun upload(@RequestPart("file") filePart: FilePart, serverHttpRequest: ServerHttpRequest): File {
+    suspend fun upload(@RequestPart("file") filePart: FilePart): File {
         return fileService.upload(filePart)
     }
 
