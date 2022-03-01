@@ -7,18 +7,11 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
-    kotlin("kapt") version "1.6.10"
 }
 
 group = "com.file"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
-
-kapt {
-    arguments {
-        arg("mapstruct.defaultComponentModel", "spring")
-    }
-}
 
 repositories {
     mavenCentral()
@@ -27,11 +20,10 @@ repositories {
 dependencies {
     // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
 
     // Spring Boot Documentation
-    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.3")
-    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.3")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.5")
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.5")
 
     // Data
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
@@ -50,10 +42,6 @@ dependencies {
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8")
 
-    // MapStruct
-    implementation("org.mapstruct:mapstruct:1.4.2.Final")
-    kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
-
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
@@ -62,7 +50,7 @@ dependencies {
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=enable", "-Xopt-in=kotlin.RequiresOptIn")
+            freeCompilerArgs = listOf("-Xjsr305=strict")
             jvmTarget = "11"
         }
     }
