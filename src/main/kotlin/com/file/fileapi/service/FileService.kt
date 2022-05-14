@@ -9,6 +9,7 @@ import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Mono
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -27,6 +28,7 @@ class FileService(
 
         mono { filePart }
             .flatMap { fp -> fp.transferTo(basePath.resolve(file.getName())) }
+            .onError { fileRepository.deleteById(file.id!!) }
             .subscribe()
 
         return file
@@ -50,4 +52,12 @@ class FileService(
 
     private val FilePart.extension: String
         get() = filename().substringAfterLast('.', "")
+
+    private fun <T> Mono<T>.onError(block: suspend (Throwable) -> Unit): Mono<T> {
+        return this.onErrorResume {
+            mono {
+                block.invoke(it)
+            }.then(Mono.error(it))
+        }
+    }
 }
