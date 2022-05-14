@@ -25,12 +25,8 @@ class FileService(
         val extension = filePart.extension
         val file = fileRepository.save(File(extension = extension))
 
-        mono {
-            filePart
-        }
-            .flatMap { fp ->
-                fp.transferTo(basePath.resolve(file.getName()))
-            }
+        mono { filePart }
+            .flatMap { fp -> fp.transferTo(basePath.resolve(file.getName())) }
             .subscribe()
 
         return file
