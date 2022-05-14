@@ -2,11 +2,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.tasks.KtLintFormatTask
 
 plugins {
-    id("org.springframework.boot") version "2.6.3"
+    id("org.springframework.boot") version "2.6.7"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
-    kotlin("jvm") version "1.6.10"
-    kotlin("plugin.spring") version "1.6.10"
+    kotlin("jvm") version "1.6.21"
+    kotlin("plugin.spring") version "1.6.21"
 }
 
 group = "com.file"
@@ -22,8 +22,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     // Spring Boot Documentation
-    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.5")
-    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.5")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.8")
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.8")
 
     // Data
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
